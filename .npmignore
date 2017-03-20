@@ -1,0 +1,12 @@
+# production
+!build
+!dist
+
+# development
+src
+test-app
+
+# misc
+.DS_Store
+.env
+*.log
