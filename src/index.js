@@ -1,3 +1,5 @@
 export { Viz } from './Viz'
-export { Polyline, Square, SquareChart } from './sub'
+export { Line } from './components/Line'
+export { Polyline } from './components/Polyline'
+export { Square, Squares } from './components/Squares'
 export { normalizeScale, denormalizeScale } from './utils'

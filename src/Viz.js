@@ -23,7 +23,7 @@ export const Viz = dimension(class Viz extends React.Component {
   render() {
     const { children, onClick = noop, onMouseMove = noop, ...otherProps } = this.props
     const { scales, mouse } = this
-
+    const svgProps = omit(otherProps, ['dimensions', 'margin'])
     const listeners = {
       onMouseMove({ clientX, clientY }) {
         mouse.x = clientX
@@ -54,7 +54,7 @@ export const Viz = dimension(class Viz extends React.Component {
 
     return (
       <Context scales={scales} mouse={mouse}>
-        <svg width="100%" height="100%" {...omit(otherProps, ['dimensions'])} {...listeners}>
+        <svg width="100%" height="100%" {...svgProps} {...listeners}>
           {children}
         </svg>
       </Context>

@@ -20,7 +20,7 @@ export class Context extends React.Component {
 }
 
 export function inject(...contextKeys) {
-  return (Injected) => {
+  return (InjectedComponent) => {
     return class Injector extends React.Component {
       static contextTypes = buildContextTypesAny(contextKeys)
 
@@ -29,7 +29,7 @@ export function inject(...contextKeys) {
           ...pick(this.context, contextKeys),
           ...this.props,
         }
-        return <Injected {...props} />
+        return <InjectedComponent {...props} />
       }
     }
   }

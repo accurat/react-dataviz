@@ -74,9 +74,13 @@ export function calculateScales(width, height, margin = 0) {
   }
 }
 
-export function checkCoordinates(points) {
-  if (!points.every(({ x, y }) => [x, y].every(Number.isFinite))) {
-    console.warn(`AccuViz: incorrect coordinates:`, points)
-    throw new Error(`AccuViz: incorrect coordinates.`)
+export function checkCoordinate(point, { component = 'Unknown', message = '', details } = {}) {
+  if (![point.x, point.y].every(Number.isFinite)) {
+    console.warn(`Viz/${component}: incorrect coordinate:`, { details })
+    throw new Error(`Viz/${component}: incorrect coordinate.`)
   }
+}
+
+export function checkCoordinates(points, info = {}) {
+  points.forEach(p => { checkCoordinate(p, info = {}) })
 }
