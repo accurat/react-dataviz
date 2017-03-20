@@ -13,10 +13,18 @@ export const Polyline = inject('scales')(props => {
     .map(({ x, y }) => `${x},${y}`)
     .concat(closed ? `${endX},${scales.y(0)} ${beginX},${scales.y(0)} ${beginX},${beginY}` : '')
     .join(' ')
+
   if (otherProps.onMouseOver) {
     // TODO: Refactor and apply to all other elements.
     const listener = otherProps.onMouseOver
     otherProps.onMouseOver = () => listener(identifier)
   }
+
+  otherProps.style = {
+    strokeWidth: 5,
+    strokeLinecap: 'square',
+    ...otherProps.style,
+  }
+
   return <polyline points={svgPoints} y={0} {...otherProps} />
 })

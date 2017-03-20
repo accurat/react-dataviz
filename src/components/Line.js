@@ -11,7 +11,7 @@ function scaleXY(scales, { x, y }) {
 
 const ZERO = { x: 0, y: 0 }
 
-export const Line = inject('scales')(({ scales, from = ZERO, to = ZERO, w = 1, ...otherProps }) => {
+export const Line = inject('scales')(({ scales, from = ZERO, to = ZERO, w = 5, ...otherProps }) => {
   checkCoordinates([from, to], { component: 'Line', details: otherProps })
   const { x: sx1, y: sy1 } = scaleXY(scales, from)
   const { x: sx2, y: sy2 } = scaleXY(scales, to)
