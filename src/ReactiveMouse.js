@@ -6,8 +6,4 @@ export default class ReactiveMouse {
   @observable click = false
   @observable rightClick = false
   @observable middleClick = false
-
-  listeners = {
-
-  }
 }

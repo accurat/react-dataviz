@@ -64,12 +64,14 @@ function buildMargin(margin) {
 
 export function calculateScales(width, height, margin = 0) {
   const { top, bottom, left, right } = buildMargin(margin)
+  const innerWidth = width - (left + right)
+  const innerHeight = height - (top + bottom)
   return {
-    x: x => left + x * (width - (left + right)),
-    y: y => top + (1 - y) * (height - (top + bottom)),
+    x: x => left + x * innerWidth,
+    y: y => top + (1 - y) * innerHeight,
     inverse: {
-      x: ix => ix / (width - (left + right)) - left,
-      y: iy => -(iy / (height - (top + bottom))) + 1 - top,
+      x: ix => (ix - left) / innerWidth,
+      y: iy => 1 - ((iy - top) / innerHeight),
     },
   }
 }
