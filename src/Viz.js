@@ -9,7 +9,7 @@ export const Viz = dimension(class Viz extends React.Component {
   mouse = null
 
   componentWillMount() {
-    this.mouse = new ReactiveMouse()
+    this.mouse = new ReactiveMouse(this.scales)
 
     this.componentWillUpdate(this.props)
   }
@@ -21,36 +21,10 @@ export const Viz = dimension(class Viz extends React.Component {
   }
 
   render() {
-    const { children, onClick = noop, onMouseMove = noop, ...otherProps } = this.props
+    const { children, ...otherProps } = this.props
     const { scales, mouse } = this
     const svgProps = omit(otherProps, ['dimensions', 'margin'])
-    const listeners = {
-      onMouseMove({ clientX, clientY }) {
-        mouse.x = clientX
-        mouse.y = clientY
-        onMouseMove({
-          ...mouse,
-          scaledX: scales.inverse.x(mouse.x),
-          scaledY: scales.inverse.y(mouse.y),
-        })
-      },
-      onMouseLeave() {
-        mouse.x = null
-      },
-      onMouseDown() {
-        mouse.click = true
-      },
-      onMouseUp() {
-        mouse.click = false
-      },
-      onClick(event) {
-        onClick({
-          ...mouse,
-          scaledX: scales.inverse.x(mouse.x),
-          scaledY: scales.inverse.y(mouse.y),
-        })
-      },
-    }
+    const listeners = getListeners(otherProps, mouse)
 
     return (
       <Context scales={scales} mouse={mouse}>
@@ -61,3 +35,23 @@ export const Viz = dimension(class Viz extends React.Component {
     )
   }
 })
+
+const LEFT_BUTTON = 1
+const RIGHT_BUTTON = 2
+const MIDDLE_BUTTON = 4
+
+function getListeners(props, mouse) {
+  const listenerProps = Object.keys(props).filter(k => k.match(/^on[A-Z]/))
+  return listenerProps.reduce((obj, k) => {
+    const originalListener = obj[k]
+    const newListener = (event) => {
+      mouse.x = event.clientX
+      mouse.y = event.clientY
+      mouse.click = (event.buttons & LEFT_BUTTON > 0)
+      mouse.clickRight = (event.buttons & RIGHT_BUTTON > 0)
+      mouse.clickMiddle = (event.buttons & MIDDLE_BUTTON > 0)
+      originalListener(mouse)
+    }
+    obj[k] = newListener
+  }, {})
+}
