@@ -1,6 +1,7 @@
 import React from 'react'
-import { Viz, Polyline, Line, Squares, Square, Circles } from 'react-viz'
-console.assert(Viz && Polyline && Line)
+import { observer } from 'mobx-react'
+import { toJS } from 'mobx'
+import { Viz, Polyline, Line, Squares, Square, Circles, buildReactiveMouse } from 'react-viz'
 
 const data1 = [ 0.12, 0.65, 0.76, 0.73, 0.64, 0.76, 0.22, 0.32, 0.83, 0.18, 0.27 ]
 const data2 = [ 0.15, 0.12, 0.22, 0.76, 0.73, 1.00, 0.64, 0.76, 0.32, 0.28, 0.29 ]
@@ -15,11 +16,41 @@ function dataToPoints(data) {
   return data.map((d, i) => ({ x: interval * i, y: d }))
 }
 
+@observer
+class MouseDisplay extends React.Component {
+  render() {
+    const { mouse } = this.props
+    const displayFloatOrValue = v => Number.isFinite(v) ? v.toFixed(2) : String(v)
+    const mouseAttrs = Object.entries(toJS(mouse) || {})
+    return (
+      <table>
+        <tbody>
+          {mouseAttrs.map(([k, v]) =>
+            <tr key={k}>
+              <td className="w2 blue"> {k} </td>
+              <td className="w4"> {displayFloatOrValue(v)} </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    )
+  }
+}
+
 export default class App extends React.Component {
+  componentDidMount() {
+    window.addEventListener('keydown', (ev) => { if (ev.key === ' ') this.forceUpdate() })
+  }
+
+  mouse = buildReactiveMouse()
+
   render() {
     return (
       <div className="w-100 h-100 bg-black-10">
-        <Viz margin={{ vert: 200, horiz: 200 }}>
+        <div className="absolute pa2 bottom-0 right-0 code">
+          <MouseDisplay mouse={this.mouse} />
+        </div>
+        <Viz margin={{ vert: 200, horiz: 200 }} mouse={this.mouse}>
           <g>
             <Line from={{ x: 0, y: 0 }} to={{ x: 0, y: 1 }} style={gridStyle} />
             <Line from={{ x: 0, y: 0 }} to={{ x: 1, y: 0 }} style={gridStyle} />

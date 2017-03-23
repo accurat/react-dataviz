@@ -1,16 +1,12 @@
 import React from 'react'
 import { omit } from 'lodash'
 import { Context } from './context'
-import ReactiveMouse from './ReactiveMouse'
-import { dimension, calculateScales, noop } from './utils'
+import { dimension, calculateScales } from './utils'
 
 export const Viz = dimension(class Viz extends React.Component {
   scales = calculateScales(1, 1)
-  mouse = null
 
   componentWillMount() {
-    this.mouse = new ReactiveMouse()
-
     this.componentWillUpdate(this.props)
   }
 
@@ -21,39 +17,13 @@ export const Viz = dimension(class Viz extends React.Component {
   }
 
   render() {
-    const { children, onClick = noop, onMouseMove = noop, ...otherProps } = this.props
-    const { scales, mouse } = this
+    const { children, mouse, ...otherProps } = this.props
+    const { scales } = this
     const svgProps = omit(otherProps, ['dimensions', 'margin'])
-    const listeners = {
-      onMouseMove({ clientX, clientY }) {
-        mouse.x = clientX
-        mouse.y = clientY
-        onMouseMove({
-          ...mouse,
-          scaledX: scales.inverse.x(mouse.x),
-          scaledY: scales.inverse.y(mouse.y),
-        })
-      },
-      onMouseLeave() {
-        mouse.x = null
-      },
-      onMouseDown() {
-        mouse.click = true
-      },
-      onMouseUp() {
-        mouse.click = false
-      },
-      onClick(event) {
-        onClick({
-          ...mouse,
-          scaledX: scales.inverse.x(mouse.x),
-          scaledY: scales.inverse.y(mouse.y),
-        })
-      },
-    }
+    const listeners = mouse ? buildListeners(otherProps, mouse, scales) : {}
 
     return (
-      <Context scales={scales} mouse={mouse}>
+      <Context scales={scales}>
         <svg width="100%" height="100%" {...svgProps} {...listeners}>
           {children}
         </svg>
@@ -61,3 +31,20 @@ export const Viz = dimension(class Viz extends React.Component {
     )
   }
 })
+
+function buildListeners(props, mouse, scales) {
+  const listeners = [
+    'onClick',
+    'onMouseDown',
+    'onMouseUp',
+    'onMouseMove',
+  ]
+  return listeners.reduce((obj, key) => {
+    const originalListener = props[key]
+    obj[key] = (event) => {
+      mouse.fromEvent(event, scales)
+      if (originalListener) originalListener(mouse)
+    }
+    return obj
+  }, {})
+}
