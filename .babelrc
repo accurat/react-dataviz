@@ -1,9 +1,9 @@
 {
   "sourceMaps": false,
   "presets": [
-    "latest",
-    "react",
-    "stage-0"
+    "stage-0",
+    "es2017",
+    "react"
   ],
   "plugins": [
     ["transform-decorators-legacy"],
