@@ -1,17 +1,17 @@
 import React from 'react'
-import { zipObject, pick } from 'lodash'
+import { pick, omit } from 'lodash'
 
-function any() { return null }
-
-function buildContextTypesAny(keys) {
-  return zipObject(keys, Array(keys.length).fill(any))
-}
+function propTypesAny() { return null }
 
 export class Context extends React.Component {
-  static childContextTypes = buildContextTypesAny(['scales', 'mouse'])
+  static childContextTypes = {
+    reactDatavizContext: propTypesAny,
+  }
 
   getChildContext() {
-    return pick(this.props, ['scales', 'mouse'])
+    return {
+      reactDatavizContext: omit(this.props, ['children']),
+    }
   }
 
   render() {
@@ -22,11 +22,13 @@ export class Context extends React.Component {
 export function inject(...contextKeys) {
   return (InjectedComponent) => {
     return class Injector extends React.Component {
-      static contextTypes = buildContextTypesAny(contextKeys)
+      static contextTypes = {
+        reactDatavizContext: propTypesAny,
+      }
 
       render() {
         const props = {
-          ...pick(this.context, contextKeys),
+          ...pick(this.context.reactDatavizContext, contextKeys),
           ...this.props,
         }
         return <InjectedComponent {...props} />
