@@ -1,5 +1,3 @@
-# Project Name
+# React Dataviz - Test App
 
-This project was bootstrapped with [AccurApp](https://github.com/accurat/accurapp),
-a fork of [create-react-app](https://github.com/facebookincubator/create-react-app/)
-for the specific needs of Accurat.
+Run `yarn link react-dataviz` before using!
