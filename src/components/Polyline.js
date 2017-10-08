@@ -1,5 +1,5 @@
 import React from 'react'
-import { checkCoordinates } from '../utils'
+import { checkCoordinates } from '../scales-utils'
 import { inject } from '../context'
 
 export const Polyline = inject('scales')(props => {

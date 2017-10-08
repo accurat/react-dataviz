@@ -1,9 +1,12 @@
 import React from 'react'
 import { omit } from 'lodash'
 import { Context } from './context'
-import { dimension, calculateScales } from './utils'
+import { calculateScales } from './scales-utils'
+import withDimensions from './with-dimensions'
+import { execChildrenFunctions } from './react-utils'
+import Grid from './components/Grid'
 
-export const Viz = dimension(class Viz extends React.Component {
+export default withDimensions(class Viz extends React.Component {
   scales = calculateScales(1, 1)
 
   componentWillMount() {
@@ -17,7 +20,7 @@ export const Viz = dimension(class Viz extends React.Component {
   }
 
   render() {
-    const { children, mouse, ...otherProps } = this.props
+    const { children, mouse, debug, ...otherProps } = this.props
     const { scales } = this
     const svgProps = omit(otherProps, ['dimensions', 'margin'])
     const listeners = mouse ? buildListeners(otherProps, mouse, scales) : {}
@@ -25,7 +28,8 @@ export const Viz = dimension(class Viz extends React.Component {
     return (
       <Context scales={scales}>
         <svg width="100%" height="100%" {...svgProps} {...listeners}>
-          {children}
+          {debug && <Grid scales={scales} color={typeof debug === 'string' ? debug : 'steelblue'} /> }
+          {execChildrenFunctions(children, [scales])}
         </svg>
       </Context>
     )

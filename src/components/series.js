@@ -1,5 +1,5 @@
 import React from 'react'
-import { checkCoordinates } from '../utils'
+import { checkCoordinates } from '../scales-utils'
 
 export function series(SubComponent, name = SubComponent.name + 's') {
   const SeriesComponent = function SeriesComponent({ points, keyFunc = ({ x }) => x, ...otherProps }) {
