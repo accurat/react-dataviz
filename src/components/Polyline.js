@@ -21,8 +21,9 @@ export const Polyline = inject('scales')(props => {
   }
 
   otherProps.style = {
-    strokeWidth: 5,
+    strokeWidth: 2,
     strokeLinecap: 'square',
+    fill: 'none',
     ...otherProps.style,
   }
 
