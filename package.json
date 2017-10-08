@@ -13,7 +13,9 @@
   ],
   "scripts": {
     "build": "babel src/ --out-dir dist/",
-    "watch": "yarn build -- --watch"
+    "watch": "yarn build -- --watch",
+    "prestart": "yarn link && (cd test-app && yarn link react-dataviz)",
+    "start": "(cd test-app && yarn start)"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",

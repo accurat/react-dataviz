@@ -1,3 +1,3 @@
 # React Dataviz - Test App
 
-Run `yarn link react-dataviz` before using!
+Run `yarn start` from the root directory to start this testing application.
