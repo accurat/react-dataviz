@@ -7,7 +7,7 @@ export function denormalize([min, max], n) {
   return min * (1 - n) + max * n
 }
 
-function buildMargin(margin) {
+export function buildMargin(margin) {
   if (typeof margin === 'number') {
     const m = margin
     return { top: m, right: m, bottom: m, left: m }

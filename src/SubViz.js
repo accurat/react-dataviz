@@ -4,6 +4,7 @@ import { Context, inject } from './context'
 import { calculateScales } from './scales-utils'
 import { execChildrenFunctions } from './react-utils'
 import Grid from './components/Grid'
+import Frame from './components/Frame'
 
 export default inject('scales')(class SubViz extends React.Component {
   innerScales = null
@@ -28,7 +29,12 @@ export default inject('scales')(class SubViz extends React.Component {
     return (
       <Context scales={innerScales}>
         <g {...gProps}>
-          {debug && <Grid color={typeof debug === 'string' ? debug : 'tomato'} /> }
+          {debug && (
+            <g>
+              <Grid color={typeof debug === 'string' ? debug : 'tomato'} />
+              <Frame margin={margin} color={typeof debug === 'string' ? debug : 'tomato'} />
+            </g>
+          )}
           {execChildrenFunctions(children, [innerScales])}
         </g>
       </Context>
