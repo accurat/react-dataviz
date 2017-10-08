@@ -7,22 +7,22 @@ import { execChildrenFunctions } from './react-utils'
 import Grid from './components/Grid'
 
 export default withDimensions(class Viz extends React.Component {
-  scales = calculateScales(1, 1)
+  scales = calculateScales([0, 0], [1, 1])
 
   componentWillMount() {
     this.componentWillUpdate(this.props)
   }
 
   componentWillUpdate(nextProps) {
-    const { width, height } = nextProps.dimensions
-    const { margin } = nextProps
-    this.scales = calculateScales(width, height, margin)
+    const { margin, dimensions, flipY } = nextProps
+    const { width, height } = dimensions
+    this.scales = calculateScales([0, 0], [width, height], margin, { flipY })
   }
 
   render() {
     const { children, mouse, debug, ...otherProps } = this.props
     const { scales } = this
-    const svgProps = omit(otherProps, ['dimensions', 'margin'])
+    const svgProps = omit(otherProps, ['dimensions', 'margin', 'flipY'])
     const listeners = mouse ? buildListeners(otherProps, mouse, scales) : {}
 
     return (

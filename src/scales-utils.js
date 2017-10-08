@@ -32,22 +32,42 @@ function buildMargin(margin) {
   return { top, bottom, left, right }
 }
 
-export function calculateScales(width, height, margin = 0) {
+function flipNormalized(y) {
+  return 1 - y
+}
+
+function id(y) {
+  return y
+}
+
+export function calculateScales(zeroXY, oneXY, margin = 0, { flipY = false } = {}) {
+  const [zeroX, zeroY] = zeroXY
+  const [oneX, oneY] = oneXY
+  const width = oneX - zeroX
+  const height = oneY - zeroY
   const { top, bottom, left, right } = buildMargin(margin)
   const innerWidth = width - left - right
   const innerHeight = height - top - bottom
-  return {
-    x: x => denormalize([left, width - right], x),
-    y: y => denormalize([top, height - bottom], y),
+
+  const domainX = [left + zeroX, oneX - right]
+  const domainY = [top + zeroY, oneY - bottom]
+  const maybeFlip = flipY ? flipNormalized : id
+
+  const scales = {
+    x: x => denormalize(domainX, x),
+    y: y => denormalize(domainY, maybeFlip(y)),
+    xy: ([x, y]) => [scales.x(x), scales.y(y)],
     w: x => x * innerWidth,
     h: y => y * innerHeight,
     inverse: {
-      x: ix => normalize([left, width - right], ix),
-      y: iy => normalize([top, height - bottom], iy),
+      x: ix => normalize(domainX, ix),
+      y: iy => maybeFlip(normalize(domainY, iy)),
+      xy: ([ix, iy]) => [scales.inverse.x(ix), scales.inverse.y(iy)],
       w: ix => ix / innerWidth,
       h: iy => iy / innerHeight,
     },
   }
+  return scales
 }
 
 export function checkCoordinate(point, { component = 'Unknown', message = '', details } = {}) {

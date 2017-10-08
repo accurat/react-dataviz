@@ -1,12 +1,12 @@
 import React from 'react'
 import { omit } from 'lodash'
 import { Context, inject } from './context'
-import { denormalize } from './scales-utils'
+import { calculateScales } from './scales-utils'
 import { execChildrenFunctions } from './react-utils'
 import Grid from './components/Grid'
 
 export default inject('scales')(class SubViz extends React.Component {
-  scales = null
+  innerScales = null
 
   componentWillMount() {
     this.updateScales(this.props)
@@ -16,29 +16,20 @@ export default inject('scales')(class SubViz extends React.Component {
     this.updateScales(nextProps)
   }
 
-  updateScales({ from, to, scales: outerScales }) {
-    const [x1, x2] = [from[0], to[0]].map(outerScales.x)
-    const [y1, y2] = [from[1], to[1]].map(outerScales.y)
-    const w = x2 - x1
-    const h = y2 - y1
-    this.scales = {
-      x: x => denormalize([x1, x2], x),
-      y: y => denormalize([y1, y2], y),
-      w: x => x * w,
-      h: y => y * h,
-    }
+  updateScales({ from, to, scales: outerScales, margin, flipY }) {
+    this.innerScales = calculateScales(outerScales.xy(from), outerScales.xy(to), margin, { flipY })
   }
 
   render() {
-    const { children, debug, ...otherProps } = this.props
-    const { scales } = this
-    const gProps = omit(otherProps, ['scales', 'from', 'to'])
+    const { children, debug, margin, ...otherProps } = this.props
+    const { innerScales } = this
+    const gProps = omit(otherProps, ['scales', 'from', 'to', 'margin', 'flipY'])
 
     return (
-      <Context scales={scales}>
+      <Context scales={innerScales}>
         <g {...gProps}>
           {debug && <Grid color={typeof debug === 'string' ? debug : 'tomato'} /> }
-          {execChildrenFunctions(children, [scales])}
+          {execChildrenFunctions(children, [innerScales])}
         </g>
       </Context>
     )

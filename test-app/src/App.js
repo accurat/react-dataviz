@@ -1,15 +1,13 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
-import { Viz, SubViz, Polyline, Line, Squares, Square, Circles, buildReactiveMouse } from 'react-dataviz'
+import { Viz, SubViz, Polyline, Squares, Circles, buildReactiveMouse } from 'react-dataviz'
 
 const data1 = [ 0.12, 0.65, 0.76, 0.73, 0.64, 0.76, 0.22, 0.32, 0.83, 0.18, 0.27 ]
 const data2 = [ 0.15, 0.12, 0.22, 0.76, 0.73, 1.00, 0.64, 0.76, 0.32, 0.28, 0.29 ]
 
 const style1 = { stroke: 'blue', fill: 'rgba(0, 0, 255, 0.1)', opacity: 0.5 }
 const style2 = { stroke: 'red', fill: 'none', opacity: 0.5 }
-const gridStyle = { stroke: 'lightgreen' }
-const centerStyle = { fill: 'lightgreen' }
 
 function dataToPoints(data) {
   const interval = 1 / (data.length - 1)
@@ -53,11 +51,13 @@ export default class App extends React.Component {
         <div className="absolute pa2 bottom-0 right-0 code">
           <MouseDisplay mouse={this.mouse} />
         </div>
-        <Viz margin={{ vert: 100, horiz: 100 }} mouse={this.mouse} debug="green">
-          <Polyline points={dataToPoints(data1)} style={style1} closed />
-          <Circles points={dataToPoints(data1)} style={{ stroke: 'none', fill: 'steelblue', opacity: 0.5 }} />
-          <Polyline points={dataToPoints(data2)} style={style2} />
-          <Squares points={dataToPoints(data2)} style={{ stroke: 'none', fill: 'yellow', opacity: 0.5 }} />
+        <Viz margin={{ vert: 50, horiz: 50 }} mouse={this.mouse} debug="green">
+          <SubViz flipY from={[0, 0]} to={[1, 1]} margin={20} debug="steelblue">
+            <Polyline points={dataToPoints(data1)} style={style1} closed />
+            <Circles points={dataToPoints(data1)} style={{ stroke: 'none', fill: 'steelblue', opacity: 0.5 }} />
+            <Polyline points={dataToPoints(data2)} style={style2} />
+            <Squares points={dataToPoints(data2)} style={{ stroke: 'none', fill: 'yellow', opacity: 0.5 }} />
+          </SubViz>
         </Viz>
       </div>
     )
