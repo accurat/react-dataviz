@@ -1,12 +1,12 @@
 import React from 'react'
 import { omit } from 'lodash'
 import { Context, inject } from './context'
-import { calculateScales } from './scales-utils'
+import { calculateRescale } from './rescale-utils'
 import { execChildrenFunctions } from './react-utils'
 import Grid from './components/Grid'
 import Frame from './components/Frame'
 
-export default inject('scales')(class SubViz extends React.Component {
+export default inject('rescale')(class SubViz extends React.Component {
   innerScales = null
 
   componentWillMount() {
@@ -17,17 +17,17 @@ export default inject('scales')(class SubViz extends React.Component {
     this.updateScales(nextProps)
   }
 
-  updateScales({ from, to, scales: outerScales, margin, flipY }) {
-    this.innerScales = calculateScales(outerScales.xy(from), outerScales.xy(to), margin, { flipY })
+  updateScales({ from, to, rescale: outerScales, margin, flipY }) {
+    this.innerScales = calculateRescale(outerScales.xy(from), outerScales.xy(to), margin, { flipY })
   }
 
   render() {
     const { children, debug, margin, ...otherProps } = this.props
     const { innerScales } = this
-    const gProps = omit(otherProps, ['scales', 'from', 'to', 'margin', 'flipY'])
+    const gProps = omit(otherProps, ['rescale', 'from', 'to', 'margin', 'flipY'])
 
     return (
-      <Context scales={innerScales}>
+      <Context rescale={innerScales}>
         <g {...gProps}>
           {debug && (
             <g>

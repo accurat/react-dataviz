@@ -40,7 +40,7 @@ function id(y) {
   return y
 }
 
-export function calculateScales(zeroXY, oneXY, margin = 0, { flipY = false } = {}) {
+export function calculateRescale(zeroXY, oneXY, margin = 0, { flipY = false } = {}) {
   const [zeroX, zeroY] = zeroXY
   const [oneX, oneY] = oneXY
   const width = oneX - zeroX
@@ -53,21 +53,21 @@ export function calculateScales(zeroXY, oneXY, margin = 0, { flipY = false } = {
   const domainY = [top + zeroY, oneY - bottom]
   const maybeFlip = flipY ? flipNormalized : id
 
-  const scales = {
+  const rescale = {
     x: x => denormalize(domainX, x),
     y: y => denormalize(domainY, maybeFlip(y)),
-    xy: ([x, y]) => [scales.x(x), scales.y(y)],
+    xy: ([x, y]) => [rescale.x(x), rescale.y(y)],
     w: x => x * innerWidth,
     h: y => y * innerHeight,
     inverse: {
       x: ix => normalize(domainX, ix),
       y: iy => maybeFlip(normalize(domainY, iy)),
-      xy: ([ix, iy]) => [scales.inverse.x(ix), scales.inverse.y(iy)],
+      xy: ([ix, iy]) => [rescale.inverse.x(ix), rescale.inverse.y(iy)],
       w: ix => ix / innerWidth,
       h: iy => iy / innerHeight,
     },
   }
-  return scales
+  return rescale
 }
 
 export function checkCoordinate(point, { component = 'Unknown', message = '', details } = {}) {

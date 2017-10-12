@@ -3,7 +3,7 @@ import { times } from 'lodash'
 import { flatten, mapCouples } from '../reducers'
 import { inject } from '../context'
 
-export default inject('scales')(function Grid({ scales, color = 'black' }) {
+export default inject('rescale')(function Grid({ rescale, color = 'black' }) {
   const gridPoints = [].concat(
     times(11, i => [
       i % 2 === 0 ? 0 : 1,
@@ -23,7 +23,7 @@ export default inject('scales')(function Grid({ scales, color = 'black' }) {
       points={
         gridPoints
         .reduce(flatten(), [])
-        .reduce(mapCouples(scales.x, scales.y), [])
+        .reduce(mapCouples(rescale.x, rescale.y), [])
       }
       fill="none"
       stroke={color}

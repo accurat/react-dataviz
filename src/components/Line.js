@@ -1,20 +1,20 @@
 import React from 'react'
-import { checkCoordinates } from '../scales-utils'
+import { checkCoordinates } from '../rescale-utils'
 import { inject } from '../context'
 
-function scaleXY(scales, { x, y }) {
+function scaleXY(rescale, { x, y }) {
   return {
-    x: scales.x(x),
-    y: scales.y(y),
+    x: rescale.x(x),
+    y: rescale.y(y),
   }
 }
 
 const ZERO = { x: 0, y: 0 }
 
-export const Line = inject('scales')(({ scales, from = ZERO, to = ZERO, w = 5, ...otherProps }) => {
+export const Line = inject('rescale')(({ rescale, from = ZERO, to = ZERO, w = 5, ...otherProps }) => {
   checkCoordinates([from, to], { component: 'Line', details: otherProps })
-  const { x: sx1, y: sy1 } = scaleXY(scales, from)
-  const { x: sx2, y: sy2 } = scaleXY(scales, to)
+  const { x: sx1, y: sy1 } = scaleXY(rescale, from)
+  const { x: sx2, y: sy2 } = scaleXY(rescale, to)
   otherProps.style = {
     strokeWidth: w,
     strokeLinecap: 'square',

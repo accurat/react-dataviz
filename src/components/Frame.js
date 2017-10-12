@@ -1,20 +1,20 @@
 import React from 'react'
 import { inject } from '../context'
-import { buildMargin } from '../scales-utils'
+import { buildMargin } from '../rescale-utils'
 
-export default inject('scales')(function Frame({ scales, margin, color = 'black' }) {
+export default inject('rescale')(function Frame({ rescale, margin, color = 'black' }) {
   margin = buildMargin(margin)
-  const flipY = scales.y(0) > scales.y(1)
+  const flipY = rescale.y(0) > rescale.y(1)
 
-  const l = scales.x(0)
-  const r = scales.x(1)
-  const t = scales.y(0)
-  const b = scales.y(1)
+  const l = rescale.x(0)
+  const r = rescale.x(1)
+  const t = rescale.y(0)
+  const b = rescale.y(1)
 
-  const fl = scales.x(0) - margin.left
-  const fr = scales.x(1) + margin.right
-  const ft = scales.y(0) + (flipY ? margin.bottom : -margin.top)
-  const fb = scales.y(1) + (flipY ? -margin.top : margin.bottom)
+  const fl = rescale.x(0) - margin.left
+  const fr = rescale.x(1) + margin.right
+  const ft = rescale.y(0) + (flipY ? margin.bottom : -margin.top)
+  const fb = rescale.y(1) + (flipY ? -margin.top : margin.bottom)
 
   const framePoints = [].concat(
     [

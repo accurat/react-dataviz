@@ -16,12 +16,12 @@ class ReactiveMouse {
   @observable clickRight = false
   @observable clickMiddle = false
 
-  @action fromEvent(event, scales = null) {
+  @action fromEvent(event, rescale = null) {
     this.x = event.clientX
     this.y = event.clientY
-    if (scales) {
-      this.sx = scales.inverse.x(this.x)
-      this.sy = scales.inverse.y(this.y)
+    if (rescale) {
+      this.sx = rescale.inverse.x(this.x)
+      this.sy = rescale.inverse.y(this.y)
     }
     this.clickLeft = (event.buttons & LEFT_BUTTON) > 0
     this.clickRight = (event.buttons & RIGHT_BUTTON) > 0

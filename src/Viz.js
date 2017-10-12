@@ -1,13 +1,13 @@
 import React from 'react'
 import { omit } from 'lodash'
 import { Context } from './context'
-import { calculateScales } from './scales-utils'
+import { calculateRescale } from './rescale-utils'
 import withDimensions from './with-dimensions'
 import { execChildrenFunctions } from './react-utils'
 import Grid from './components/Grid'
 
 export default withDimensions(class Viz extends React.Component {
-  scales = calculateScales([0, 0], [1, 1])
+  rescale = calculateRescale([0, 0], [1, 1])
 
   componentWillMount() {
     this.componentWillUpdate(this.props)
@@ -16,27 +16,27 @@ export default withDimensions(class Viz extends React.Component {
   componentWillUpdate(nextProps) {
     const { margin, dimensions, flipY } = nextProps
     const { width, height } = dimensions
-    this.scales = calculateScales([0, 0], [width, height], margin, { flipY })
+    this.rescale = calculateRescale([0, 0], [width, height], margin, { flipY })
   }
 
   render() {
     const { children, mouse, debug, ...otherProps } = this.props
-    const { scales } = this
+    const { rescale } = this
     const svgProps = omit(otherProps, ['dimensions', 'margin', 'flipY'])
-    const listeners = mouse ? buildListeners(otherProps, mouse, scales) : {}
+    const listeners = mouse ? buildListeners(otherProps, mouse, rescale) : {}
 
     return (
-      <Context scales={scales}>
+      <Context rescale={rescale}>
         <svg width="100%" height="100%" {...svgProps} {...listeners}>
-          {debug && <Grid scales={scales} color={typeof debug === 'string' ? debug : 'steelblue'} /> }
-          {execChildrenFunctions(children, [scales])}
+          {debug && <Grid rescale={rescale} color={typeof debug === 'string' ? debug : 'steelblue'} /> }
+          {execChildrenFunctions(children, [rescale])}
         </svg>
       </Context>
     )
   }
 })
 
-function buildListeners(props, mouse, scales) {
+function buildListeners(props, mouse, rescale) {
   const listeners = [
     'onClick',
     'onMouseDown',
@@ -46,7 +46,7 @@ function buildListeners(props, mouse, scales) {
   return listeners.reduce((obj, key) => {
     const originalListener = props[key]
     obj[key] = (event) => {
-      mouse.fromEvent(event, scales)
+      mouse.fromEvent(event, rescale)
       if (originalListener) originalListener(mouse)
     }
     return obj
