@@ -1,8 +1,8 @@
 import React from 'react'
 import { checkCoordinates } from '../rescale-utils'
-import { inject } from '../context'
+import { injectRescale } from '../context'
 
-export const Polyline = inject('rescale')(props => {
+export const Polyline = injectRescale(props => {
   const { identifier, rescale, points, closed = false, ...otherProps } = props
   checkCoordinates(points, { component: 'Polyline', details: otherProps })
   const scaledPoints = points.map(({ x, y }) => ({ x: rescale.x(x), y: rescale.y(y) }))

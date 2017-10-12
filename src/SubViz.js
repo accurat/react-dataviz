@@ -1,12 +1,12 @@
 import React from 'react'
 import { omit } from 'lodash'
-import { Context, inject } from './context'
+import { Context, injectRescale } from './context'
 import { calculateRescale } from './rescale-utils'
 import { execChildrenFunctions } from './react-utils'
 import Grid from './components/Grid'
 import Frame from './components/Frame'
 
-export default inject('rescale')(class SubViz extends React.Component {
+export default injectRescale(class SubViz extends React.Component {
   innerScales = null
 
   componentWillMount() {

@@ -36,3 +36,7 @@ export function inject(...contextKeys) {
     }
   }
 }
+
+export function injectRescale(...args) {
+  return inject('rescale')(...args)
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { checkCoordinates } from '../rescale-utils'
-import { inject } from '../context'
+import { injectRescale } from '../context'
 
 function scaleXY(rescale, { x, y }) {
   return {
@@ -11,7 +11,7 @@ function scaleXY(rescale, { x, y }) {
 
 const ZERO = { x: 0, y: 0 }
 
-export const Line = inject('rescale')(({ rescale, from = ZERO, to = ZERO, w = 5, ...otherProps }) => {
+export const Line = injectRescale(({ rescale, from = ZERO, to = ZERO, w = 5, ...otherProps }) => {
   checkCoordinates([from, to], { component: 'Line', details: otherProps })
   const { x: sx1, y: sy1 } = scaleXY(rescale, from)
   const { x: sx2, y: sy2 } = scaleXY(rescale, to)

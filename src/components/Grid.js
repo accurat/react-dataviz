@@ -1,9 +1,9 @@
 import React from 'react'
 import { times } from 'lodash'
 import { flatten, mapCouples } from '../reducers'
-import { inject } from '../context'
+import { injectRescale } from '../context'
 
-export default inject('rescale')(function Grid({ rescale, color = 'black' }) {
+export default injectRescale(function Grid({ rescale, color = 'black' }) {
   const gridPoints = [].concat(
     times(11, i => [
       i % 2 === 0 ? 0 : 1,
