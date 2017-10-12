@@ -1,8 +1,8 @@
 import React from 'react'
-import { injectRescale } from '../context'
-import { buildMargin } from '../rescale-utils'
+import { injectRescale } from './context'
+import { buildMargin } from './rescale-utils'
 
-export default injectRescale(function Frame({ rescale, margin, color = 'black' }) {
+export default injectRescale(function DebugFrame({ rescale, margin, color = 'black' }) {
   margin = buildMargin(margin)
   const flipY = rescale.y(0) > rescale.y(1)
 

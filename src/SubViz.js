@@ -3,8 +3,8 @@ import { omit } from 'lodash'
 import { Context, injectRescale } from './context'
 import { calculateRescale } from './rescale-utils'
 import { execChildrenFunctions } from './react-utils'
-import Grid from './components/Grid'
-import Frame from './components/Frame'
+import DebugGrid from './DebugGrid'
+import DebugFrame from './DebugFrame'
 
 export default injectRescale(class SubViz extends React.Component {
   innerScales = null
@@ -31,8 +31,8 @@ export default injectRescale(class SubViz extends React.Component {
         <g {...gProps}>
           {debug && (
             <g>
-              <Grid color={typeof debug === 'string' ? debug : 'tomato'} />
-              <Frame margin={margin} color={typeof debug === 'string' ? debug : 'tomato'} />
+              <DebugGrid color={typeof debug === 'string' ? debug : 'tomato'} />
+              <DebugFrame margin={margin} color={typeof debug === 'string' ? debug : 'tomato'} />
             </g>
           )}
           {execChildrenFunctions(children, [innerScales])}

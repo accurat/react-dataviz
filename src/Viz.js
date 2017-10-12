@@ -4,7 +4,7 @@ import { Context } from './context'
 import { calculateRescale } from './rescale-utils'
 import withDimensions from './with-dimensions'
 import { execChildrenFunctions } from './react-utils'
-import Grid from './components/Grid'
+import DebugGrid from './DebugGrid'
 
 export default withDimensions(class Viz extends React.Component {
   rescale = calculateRescale([0, 0], [1, 1])
@@ -28,7 +28,7 @@ export default withDimensions(class Viz extends React.Component {
     return (
       <Context rescale={rescale}>
         <svg width="100%" height="100%" {...svgProps} {...listeners}>
-          {debug && <Grid rescale={rescale} color={typeof debug === 'string' ? debug : 'steelblue'} /> }
+          {debug && <DebugGrid rescale={rescale} color={typeof debug === 'string' ? debug : 'steelblue'} /> }
           {execChildrenFunctions(children, [rescale])}
         </svg>
       </Context>

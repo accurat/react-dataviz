@@ -1,5 +1,5 @@
 import React from 'react'
-import { injectRescale } from '../context'
+import { injectRescale } from 'react-dataviz'
 import { series } from './series'
 
 export const Circle = injectRescale(({ rescale, x, y, r = 4, ...otherProps }) => {

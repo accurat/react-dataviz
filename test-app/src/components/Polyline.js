@@ -1,6 +1,6 @@
 import React from 'react'
-import { checkCoordinates } from '../rescale-utils'
-import { injectRescale } from '../context'
+import { injectRescale } from 'react-dataviz'
+import { checkCoordinates } from './coord-utils'
 
 export const Polyline = injectRescale(props => {
   const { identifier, rescale, points, closed = false, ...otherProps } = props

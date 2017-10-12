@@ -1,7 +1,10 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
-import { Viz, SubViz, Polyline, Squares, Circles, buildReactiveMouse } from 'react-dataviz'
+import { Viz, SubViz, buildReactiveMouse } from 'react-dataviz'
+import { Polyline } from './components/Polyline'
+import { Squares } from './components/Squares'
+import { Circles } from './components/Circles'
 
 const data1 = [ 0.12, 0.65, 0.76, 0.73, 0.64, 0.76, 0.22, 0.32, 0.83, 0.18, 0.27 ]
 const data2 = [ 0.15, 0.12, 0.22, 0.76, 0.73, 1.00, 0.64, 0.76, 0.32, 0.28, 0.29 ]

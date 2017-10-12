@@ -1,6 +1,6 @@
 import React from 'react'
-import { checkCoordinates } from '../rescale-utils'
-import { injectRescale } from '../context'
+import { injectRescale } from 'react-dataviz'
+import { checkCoordinates } from './coord-utils'
 
 function scaleXY(rescale, { x, y }) {
   return {
