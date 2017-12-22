@@ -2,17 +2,9 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import { Viz, SubViz, buildReactiveMouse } from 'react-dataviz'
-import { Polyline } from './components/Polyline'
-import { Squares } from './components/Squares'
-import { Circles } from './components/Circles'
-
-const data1 = [ 0.12, 0.65, 0.76, 0.73, 0.64, 0.76, 0.22, 0.32, 0.83, 0.18, 0.27 ]
-const data2 = [ 0.15, 0.12, 0.22, 0.76, 0.73, 1.00, 0.64, 0.76, 0.32, 0.28, 0.29 ]
-
-function dataToPoints(data) {
-  const interval = 1 / (data.length - 1)
-  return data.map((d, i) => ({ x: interval * i, y: d }))
-}
+import { times, random } from 'lodash'
+import { Polyline, polyPoints } from './components/Polyline'
+import Animable from 'react-dataviz/Animable'
 
 @observer
 class MouseDisplay extends React.Component {
@@ -35,17 +27,31 @@ class MouseDisplay extends React.Component {
   }
 }
 
+const AnimG = Animable('g')
+const AnimCircle = Animable('circle')
+const AnimPolyline = Animable('polyline')
+
 export default class App extends React.Component {
-  constructor() {
-    super()
-    this.mouse = buildReactiveMouse()
+  state = {
+    data1: times(11, i => ({ x: i / 10, y: random(1, true) })),
+    data2: times(11, i => ({ x: i / 10, y: random(1, true) })),
   }
 
   componentDidMount() {
     window.addEventListener('keydown', (ev) => { if (ev.key === ' ') this.forceUpdate() })
+
+    window.setInterval(() => {
+      this.setState({
+        data1: times(11, i => ({ x: i / 10, y: random(1, true) })),
+        data2: times(11, i => ({ x: i / 10, y: random(1, true) })),
+      })
+    }, 3000)
   }
 
+  mouse = buildReactiveMouse()
+
   render() {
+    const { data1, data2 } = this.state
     return (
       <div className="w-100 h-100 bg-black">
         <div className="absolute pa2 bottom-0 right-0 code">
@@ -53,16 +59,47 @@ export default class App extends React.Component {
         </div>
         <Viz margin={{ vert: 50, horiz: 50 }} mouse={this.mouse}>
           <SubViz flipY from={[0, 0]} to={[0.5, 0.5]} margin={20} debug="#333">
-            <Polyline closed points={dataToPoints(data1)} style={{ stroke: 'none', fill: 'rgba(0, 0, 255, 0.5)' }} />
+            {rescale =>
+              <AnimG>
+                <AnimPolyline
+                  points={polyPoints(data1, rescale, { closed: true })}
+                  y={0}
+                  stroke='none'
+                  fill='rgba(0, 0, 255, 0.5)'
+                  animable={{
+                    points: polyPoints(data1.map(({ x, y }) => ({ x: 0, y })), rescale, { closed: true }),
+                  }}
+                />
+              </AnimG>
+            }
           </SubViz>
           <SubViz flipY from={[0.5, 0]} to={[1, 0.5]} margin={20} debug="#333">
-            <Polyline closed points={dataToPoints(data2)} style={{ stroke: 'none', fill: 'rgba(255, 0, 0, 0.5)' }} />
+            <Polyline points={data2} style={{ stroke: 'rgba(255, 0, 0, 0.6)', strokeWidth: 5, fill: 'none' }} />
           </SubViz>
           <SubViz flipY from={[0, 0.5]} to={[1, 1]} margin={20} debug="#333">
-            <Circles points={dataToPoints(data1)} style={{ fill: 'green' }} />
-            <Polyline points={dataToPoints(data1)} style={{ stroke: 'green' }} />
-            <Squares points={dataToPoints(data2)} style={{ fill: 'purple' }} />
-            <Polyline points={dataToPoints(data2)} style={{ stroke: 'purple' }} />
+            {rescale =>
+              <AnimG>
+                {data1.map(d =>
+                  <AnimCircle
+                    key={d.x}
+                    cx={rescale.x(d.x)}
+                    cy={rescale.y(d.y)}
+                    r={5}
+                    fill="green"
+                    animable={{
+                      fillOpacity: { enter: 0.5, exit: 0 },
+                      cx: rescale.x(0),
+                      cy: rescale.y(0),
+                    }}
+                  />
+                )}
+              </AnimG>
+            }
+            {/*
+            <Circles points={data1} style={{ fill: 'green' }} />
+            <Polyline points={data1} style={{ stroke: 'green' }} />
+            <Squares points={data2} style={{ fill: 'purple' }} />
+            <Polyline points={data2} style={{ stroke: 'purple' }} /> */}
           </SubViz>
         </Viz>
       </div>
