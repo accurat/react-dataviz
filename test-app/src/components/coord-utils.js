@@ -6,5 +6,7 @@ export function checkCoordinate(point, { component = 'Unknown', message = '', de
 }
 
 export function checkCoordinates(points, info = {}) {
-  points.forEach(p => { checkCoordinate(p, info = {}) })
+  points.forEach(p => {
+    checkCoordinate(p, (info = {}))
+  })
 }

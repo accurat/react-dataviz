@@ -11,7 +11,9 @@ class ReactiveMouse {
   @observable sx = null
   @observable sy = null
 
-  @computed get click() { return this.clickLeft }
+  @computed get click() {
+    return this.clickLeft
+  }
   @observable clickLeft = false
   @observable clickRight = false
   @observable clickMiddle = false
@@ -31,6 +33,9 @@ class ReactiveMouse {
 
 export function buildReactiveMouse(...args) {
   const mouse = new ReactiveMouse()
-  if (args.includes('debug')) autorun(() => { console.debug(toJS(mouse)) })
+  if (args.includes('debug'))
+    autorun(() => {
+      console.debug(toJS(mouse))
+    })
   return mouse
 }

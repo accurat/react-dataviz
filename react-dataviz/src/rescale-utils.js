@@ -12,10 +12,10 @@ export function buildMargin(margin) {
     const m = margin
     return { top: m, right: m, bottom: m, left: m }
   } else if (Array.isArray(margin) && margin.length === 2) {
-    const [ v, h ] = margin
+    const [v, h] = margin
     return { top: v, right: h, bottom: v, left: h }
   } else if (Array.isArray(margin)) {
-    const [ top = 0, right = 0, bottom = 0, left = 0 ] = margin
+    const [top = 0, right = 0, bottom = 0, left = 0] = margin
     return { top, right, bottom, left }
   }
 
@@ -59,6 +59,12 @@ export function calculateRescale(zeroXY, oneXY, margin = 0, { flipY = false } = 
     xy: ([x, y]) => [rescale.x(x), rescale.y(y)],
     w: x => x * innerWidth,
     h: y => y * innerHeight,
+    bbox: {
+      x0: left + zeroX,
+      y0: flipY ? oneY - bottom : top + zeroY,
+      x1: oneX - right,
+      y1: flipY ? top + zeroY : oneY - bottom,
+    },
     inverse: {
       x: ix => normalize(domainX, ix),
       y: iy => maybeFlip(normalize(domainY, iy)),

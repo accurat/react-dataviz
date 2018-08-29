@@ -1,0 +1,58 @@
+{
+  "name": "react-dataviz",
+  "version": "0.0.1",
+  "description": "A React components collection for amazing interactive data visualizations",
+  "repository": "https://github.com/accurat/react-dataviz",
+  "authors": [
+    "caesarsol <cesare.soldini@gmail.com>",
+    "lucafalasco <falasco.luca@gmail.com>"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "babel src/ --out-dir dist/",
+    "watch": "yarn build -- --watch",
+    "start": "(cd ../test-app && yarn start)"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-eslint": "^8.2.6",
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
+    "babel-preset-es2017": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
+    "babel-preset-stage-0": "^6.24.0",
+    "eslint": "^5.4.0",
+    "eslint-config-accurapp": "^4.1.0-beta.22",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-standard": "^3.1.0",
+    "prettier": "^1.14.2"
+  },
+  "peerDependencies": {
+    "mobx": ">=3.1.7",
+    "react": ">=15.4.2"
+  },
+  "dependencies": {
+    "@vx/axis": "^0.0.173",
+    "@vx/curve": "^0.0.165",
+    "@vx/geo": "^0.0.170",
+    "@vx/gradient": "^0.0.165",
+    "@vx/grid": "^0.0.171",
+    "@vx/heatmap": "^0.0.173",
+    "@vx/legend": "^0.0.170",
+    "@vx/marker": "^0.0.171",
+    "@vx/pattern": "^0.0.165",
+    "@vx/responsive": "^0.0.172",
+    "@vx/scale": "^0.0.165",
+    "@vx/shape": "^0.0.171",
+    "@vx/text": "^0.0.173",
+    "@vx/voronoi": "^0.0.170",
+    "lodash": "^4.17.10"
+  }
+}

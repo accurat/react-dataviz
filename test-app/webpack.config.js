@@ -26,10 +26,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: {
-          and: [
-            /node_modules/,
-            { not: [/node_modules\/react-dataviz\/src/] },
-          ],
+          and: [/node_modules/, { not: [/node_modules\/react-dataviz\/src/] }],
         },
         loader: 'babel-loader',
         options: {
