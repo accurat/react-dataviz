@@ -2,10 +2,12 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import { Viz, SubViz, buildReactiveMouse } from 'react-dataviz'
-import { AreaClosed, LinePath } from 'react-dataviz/shape'
+import { AreaClosed, LinePath, Pie } from 'react-dataviz/shape'
+import { Text } from 'react-dataviz/text'
 import { GradientOrangeRed, GradientPurpleTeal } from 'react-dataviz/gradient'
 import { Squares } from './components/Squares'
 import { Circles } from './components/Circles'
+import pieData from '../mock/pieData.json'
 
 const data1 = [0.12, 0.65, 0.76, 0.73, 0.64, 0.76, 0.22, 0.32, 0.83, 0.18, 0.27]
 const data2 = [0.15, 0.12, 0.22, 0.76, 0.73, 1.0, 0.64, 0.76, 0.32, 0.28, 0.29]
@@ -69,11 +71,30 @@ export default class App extends React.Component {
               style={{ stroke: 'none', fill: 'url(#OrangeRed)' }}
             />
           </SubViz>
-          <SubViz flipY from={[0, 0.5]} to={[1, 1]} margin={20} debug="#333">
+          <SubViz flipY from={[0, 0.5]} to={[0.5, 1]} margin={20} debug="#333">
             <LinePath data={dataToPoints(data1)} style={{ stroke: 'url(#PurpleTeal)' }} />
             <LinePath data={dataToPoints(data2)} style={{ stroke: 'url(#OrangeRed)' }} />
             <Squares points={dataToPoints(data2)} style={{ fill: 'white' }} />
             <Circles points={dataToPoints(data1)} style={{ fill: 'white' }} />
+          </SubViz>
+          <SubViz from={[0.5, 0.5]} to={[1, 1]} margin={20} debug="#333">
+            <Pie
+              pieValue={d => d.value}
+              data={pieData}
+              fill="white"
+              fillOpacity={d => 1 / (d.index + 2)}
+              stroke="white"
+              strokeWidth={2}
+              cornerRadius={5}
+              centroid={(centroid, arc) => {
+                const [x, y] = centroid
+                return (
+                  <Text fill="white" x={x} y={y} textAnchor="middle" verticalAnchor="middle">
+                    {arc.data.label}
+                  </Text>
+                )
+              }}
+            />
           </SubViz>
         </Viz>
       </div>

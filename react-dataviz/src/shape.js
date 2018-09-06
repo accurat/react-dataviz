@@ -1,4 +1,4 @@
-import { AreaClosed as VXAreaClosed, LinePath as VXLinePath } from '@vx/shape'
+import { AreaClosed as VXAreaClosed, LinePath as VXLinePath, Pie as VXPie } from '@vx/shape'
 import { injectRescale } from 'react-dataviz'
 import { omit } from 'lodash'
 
@@ -23,4 +23,14 @@ export const LinePath = injectRescale(props =>
   }),
 )
 
-export { AreaStack, Bar, BarGroup, BarGroupHorizontal, Pie, Line } from '@vx/shape'
+export const Pie = injectRescale(props => {
+  const { x0, x1, y0, y1 } = props.rescale.bbox
+  return VXPie({
+    outerRadius: Math.min(x1 - x0, y1 - y0) / 2,
+    top: (y0 + y1) / 2,
+    left: (x0 + x1) / 2,
+    ...omit(props, ['rescale']),
+  })
+})
+
+export { AreaStack, Bar, BarGroup, BarGroupHorizontal, Line } from '@vx/shape'
