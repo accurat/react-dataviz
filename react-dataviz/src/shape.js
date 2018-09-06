@@ -1,5 +1,6 @@
 import { AreaClosed as VXAreaClosed, LinePath as VXLinePath } from '@vx/shape'
 import { injectRescale } from 'react-dataviz'
+import { omit } from 'lodash'
 
 export const AreaClosed = injectRescale(props =>
   VXAreaClosed({
@@ -8,7 +9,7 @@ export const AreaClosed = injectRescale(props =>
     y0: props.rescale.bbox.y0,
     xScale: props.rescale.x,
     yScale: props.rescale.y,
-    ...props,
+    ...omit(props, ['rescale']),
   }),
 )
 
@@ -18,7 +19,7 @@ export const LinePath = injectRescale(props =>
     y: d => d.y,
     xScale: props.rescale.x,
     yScale: props.rescale.y,
-    ...props,
+    ...omit(props, ['rescale']),
   }),
 )
 
