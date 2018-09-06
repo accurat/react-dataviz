@@ -5,6 +5,7 @@ import { Viz, SubViz, buildReactiveMouse } from 'react-dataviz'
 import { AreaClosed, LinePath, Pie } from 'react-dataviz/shape'
 import { Text } from 'react-dataviz/text'
 import { GradientOrangeRed, GradientPurpleTeal } from 'react-dataviz/gradient'
+import { AxisBottom, AxisLeft } from 'react-dataviz/axis'
 import { Squares } from './components/Squares'
 import { Circles } from './components/Circles'
 import pieData from '../mock/pieData.json'
@@ -59,7 +60,40 @@ export default class App extends React.Component {
         <Viz margin={{ vert: 50, horiz: 50 }} mouse={this.mouse}>
           <GradientOrangeRed id="OrangeRed" />
           <GradientPurpleTeal id="PurpleTeal" />
-          <SubViz flipY from={[0, 0]} to={[0.5, 0.5]} margin={20} debug="#333">
+          <SubViz flipY from={[0, 0]} to={[0.5, 0.5]} margin={50} debug="#333">
+            <AxisBottom
+              label="BOTTOM AXIS"
+              labelProps={{
+                textAnchor: 'middle',
+                verticalAnchor: 'middle',
+                fontSize: 10,
+                fill: 'white',
+              }}
+              stroke="white"
+              tickStroke="white"
+              tickLabelProps={tick => ({
+                textAnchor: 'middle',
+                fontSize: 10,
+                fill: 'white',
+              })}
+            />
+            <AxisLeft
+              label="LEFT AXIS"
+              labelProps={{
+                textAnchor: 'middle',
+                verticalAnchor: 'middle',
+                fontSize: 10,
+                fill: 'white',
+              }}
+              stroke="white"
+              tickStroke="white"
+              tickLabelProps={tick => ({
+                textAnchor: 'end',
+                verticalAnchor: 'middle',
+                fontSize: 10,
+                fill: 'white',
+              })}
+            />
             <AreaClosed
               data={dataToPoints(data1)}
               style={{ stroke: 'none', fill: 'url(#PurpleTeal)' }}
